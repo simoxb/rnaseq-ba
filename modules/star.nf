@@ -39,7 +39,6 @@ process star_align{
     	--genomeDir . \\
     	--readFilesIn ${read} \\
     	--runThreadN ${params.threads} \\
-    	--genomeSAindexNbases 4\\
     	--outFileNamePrefix ${read.baseName}.
     """	
 }

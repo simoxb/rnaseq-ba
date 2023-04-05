@@ -19,7 +19,7 @@ process hisat2_align{
     publishDir params.outdir
  
     input:
-    path(read)
+    tuple path(name), path(read)
     tuple path(fasta), path(index)
 
     output:

@@ -18,9 +18,11 @@ workflow rnaseq_star{
 	star_index(params.fasta, params.gtf)
 	if(params.split > 1){
 		fastqsplit(fastp.out.trimmed) \
-		 | transpose() \
-		 | set{ splitted_ch }
-		 
+		 | map { name, fastq -> tuple( groupKey(name, fastq.size()), fastq ) } \
+       	 	 | transpose() \
+       	 	 | view()        	 	 
+       		 | set{ splitted_ch }
+       		
 		star_align(splitted_ch, star_index.out.index, params.gtf)
 		samtools(star_align.out.sam)
 		samtools_merge(samtools.out.collect())
@@ -41,7 +43,9 @@ workflow rnaseq_hisat2{
 	hisat2_index(params.fasta)
 	if(params.split > 1){
 		fastqsplit(fastp.out.trimmed) \
+	  	 | map { name, fastq -> tuple( groupKey(name, fastq.size()), fastq ) } \
        	 	 | transpose() \
+       	 	 | view()        	 	 
        		 | set{ splitted_ch }
        		 
 		hisat2_align(splitted_ch, hisat2_index.out.index)

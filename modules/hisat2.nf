@@ -27,15 +27,15 @@ process hisat2_align{
 
     shell:
     '''
-    if [[ ($params.strandedness == "firststrand") ]]; then
+    if [[ (!params.strandedness == "firststrand") ]]; then
     
         hisat2 -x !{fasta.baseName} -1 !{read} --new-summary --summary-file !{sample_name}_summary.log --thread !{params.threads} --rna-strandness FR -S !{read.baseName}.sam
 
-    elif [[ ($STRANDNESS == "secondstrand") ]]; then
+    elif [[ (!params.strandedness == "secondstrand") ]]; then
     
         hisat2 -x !{fasta.baseName} -1 !{read} --new-summary --summary-file !{sample_name}_summary.log --thread !{params.threads} --rna-strandness RF -S !{read.baseName}.sam
 
-    elif [[ $STRANDNESS == "unstranded" ]]; then
+    elif [[ !params.strandedness == "unstranded" ]]; then
        
         hisat2 -x !{fasta.baseName} -1 !{read} --new-summary --summary-file !{sample_name}_summary.log --thread !{params.threads} -S !{read.baseName}.sam
     fi

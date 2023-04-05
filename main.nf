@@ -48,7 +48,7 @@ workflow rnaseq_hisat2{
        	 	 | view()        	 	 
        		 | set{ splitted_ch }
        		 
-		hisat2_align(splitted_ch, hisat2_index.out.index)
+		hisat2_align(splitted_ch, hisat2_index.out.index, params.strandedness)
 		samtools(hisat2_align.out.sam)
 		samtools_merge(samtools.out.collect())
 	}else{

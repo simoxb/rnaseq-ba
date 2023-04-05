@@ -21,21 +21,22 @@ process hisat2_align{
     input:
     tuple val(name), path(read)
     tuple path(fasta), path(index)
+    env strandedness
 
     output:
     path("${read.baseName}.sam"), emit: sam 
 
     shell:
     '''
-    if [[ (!params.strandedness == "firststrand") ]]; then
+    if [[ ($strandedness == "firststrand") ]]; then
     
         hisat2 -x !{fasta.baseName} -1 !{read} --new-summary --summary-file !{read.baseName}_summary.log --thread !{params.threads} --rna-strandness FR -S !{read.baseName}.sam
 
-    elif [[ (!params.strandedness == "secondstrand") ]]; then
+    elif [[ ($strandedness == "secondstrand") ]]; then
     
         hisat2 -x !{fasta.baseName} -1 !{read} --new-summary --summary-file !{read.baseName}_summary.log --thread !{params.threads} --rna-strandness RF -S !{read.baseName}.sam
 
-    elif [[ !params.strandedness == "unstranded" ]]; then
+    elif [[ $strandedness == "unstranded" ]]; then
        
         hisat2 -x !{fasta.baseName} -1 !{read} --new-summary --summary-file !{read.baseName}_summary.log --thread !{params.threads} -S !{read.baseName}.sam
     fi

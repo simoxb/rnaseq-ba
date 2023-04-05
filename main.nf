@@ -17,11 +17,11 @@ workflow rnaseq_star{
 	
 	if(params.split > 1){
 		fastqsplit(fastp.out.trimmed)
-		star_align(fastqsplit.out.splitted, star_index.out.index)
+		star_align(fastqsplit.out.splitted, star_index.out.index, params.gtf)
 		samtools(star_align.out.sam)
 		samtools_merge(samtools.out.collect())
 	}else{
-		star_align(fastp.out.trimmed, star_index.out.index)
+		star_align(fastp.out.trimmed, star_index.out.index, params.gtf)
 		samtools(star_align.out.sam)
 	}
 }

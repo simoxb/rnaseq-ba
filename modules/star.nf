@@ -29,6 +29,7 @@ process star_align{
     input:
     path(read)
     path(index)
+    path(gtf)
 
     output:
     path("${read.baseName}*.sam"), emit: sam 
@@ -39,6 +40,10 @@ process star_align{
     	--genomeDir . \\
     	--readFilesIn ${read} \\
     	--runThreadN ${params.threads} \\
+    	--outFilterIntronMotifs RemoveNoncanonical \\
+    	--outSAMattrIHstart 0 \\
+    	--alignSoftClipAtReferenceEnds No \\
+    	--sjdbGTFfile ${gtf} \\
     	--outFileNamePrefix ${read.baseName}.
     """	
 }

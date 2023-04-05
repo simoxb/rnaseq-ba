@@ -30,15 +30,15 @@ process hisat2_align{
     '''
     if [[ ($strandedness == "firststrand") ]]; then
     
-        hisat2 -x !{fasta.baseName} -1 !{read} --new-summary --summary-file !{read.baseName}_summary.log --thread !{params.threads} --rna-strandness FR -S !{read.baseName}.sam
+        hisat2 -x !{fasta.baseName} -U !{read} --new-summary --summary-file !{read.baseName}_summary.log --thread !{params.threads} --rna-strandness FR -S !{read.baseName}.sam
 
     elif [[ ($strandedness == "secondstrand") ]]; then
     
-        hisat2 -x !{fasta.baseName} -1 !{read} --new-summary --summary-file !{read.baseName}_summary.log --thread !{params.threads} --rna-strandness RF -S !{read.baseName}.sam
+        hisat2 -x !{fasta.baseName} -U !{read} --new-summary --summary-file !{read.baseName}_summary.log --thread !{params.threads} --rna-strandness RF -S !{read.baseName}.sam
 
     elif [[ $strandedness == "unstranded" ]]; then
        
-        hisat2 -x !{fasta.baseName} -1 !{read} --new-summary --summary-file !{read.baseName}_summary.log --thread !{params.threads} -S !{read.baseName}.sam
+        hisat2 -x !{fasta.baseName} -U !{read} --new-summary --summary-file !{read.baseName}_summary.log --thread !{params.threads} -S !{read.baseName}.sam
     fi
     '''   
    

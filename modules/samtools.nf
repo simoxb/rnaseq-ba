@@ -10,7 +10,7 @@ process samtools {
     
     script:
     """
-    samtools view -b ${sam_file} | samtools sort -o ${bam_file}.sorted.bam -T tmp  
+    samtools view -b ${sam_file} | samtools sort -o ${sam_file}.sorted.bam -T tmp  
     """
     
 }

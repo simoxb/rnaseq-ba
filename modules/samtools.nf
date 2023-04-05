@@ -6,7 +6,7 @@ process samtools {
     tuple path(sam_file)
     
     output:
-    path("${bam_file}.sorted.bam")
+    path("${sam_file}.sorted.bam")
     
     script:
     """

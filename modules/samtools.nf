@@ -3,7 +3,7 @@ process samtools {
     
     
     input:
-    tuple path(sam_file)
+    path(sam_file)
     
     output:
     path("${sam_file}.sorted.bam")

@@ -7,7 +7,7 @@ process salmon_quant{
 	env strandedness
 	
 	output:
-	path("quantification_results.*")
+	path("quantification_results/*")
 	
 	shell:
 	'''

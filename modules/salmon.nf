@@ -21,7 +21,7 @@ process salmon_quant{
         
 	elif [[ $strandedness == "unstranded" ]]; then
        
-        salmon quant -t {fasta} -l IU -a !{bam} -o quantification_results
+        salmon quant -t !{fasta} -l IU -a !{bam} -o quantification_results
         
 	fi
 	'''   

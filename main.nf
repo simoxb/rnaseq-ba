@@ -27,9 +27,11 @@ workflow rnaseq_star{
 		star_align(splitted_ch, star_index.out.index, params.gtf)
 		samtools(star_align.out.sam)
 		samtools_merge(samtools.out.collect())
+		salmon_quant(samtools_merge.out, params.fasta, params.strandedness)
 	}else{
 		star_align(fastp.out.trimmed, star_index.out.index, params.gtf)
 		samtools(star_align.out.sam)
+		salmon_quant(samtools.out, params.fasta, params.strandedness)
 	}
 }
 
@@ -53,7 +55,6 @@ workflow rnaseq_hisat2{
 		samtools(hisat2_align.out.sam)
 		samtools_merge(samtools.out.collect())
 		salmon_quant(samtools_merge.out, params.fasta, params.strandedness)
-		
 	}else{
 		hisat2_align(fastp.out.trimmed, hisat2_index.out.index)
 		samtools(hisat2_align.out.sam)
@@ -79,9 +80,11 @@ workflow rnaseq_tophat2{
 		tophat2_align(splitted_ch, tophat2_index.out.index, params.fasta)
 		samtools(tophat2_align.out.sam)
 		samtools_merge(samtools.out.collect())
+		salmon_quant(samtools_merge.out, params.fasta, params.strandedness)
 	}else{
 		tophat2_align(fastp.out.trimmed, tophat2_index.out.index, params.fasta)
 		samtools(tophat2_align.out.sam)
+		salmon_quant(samtools.out, params.fasta, params.strandedness)
 	}
 }
 

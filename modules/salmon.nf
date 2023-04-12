@@ -13,15 +13,15 @@ process salmon_quant{
 	'''
 	if [[ ($strandedness == "firststrand") ]]; then
     
-    	salmon quant -t ${fasta} -l ISR -a ${bam} -o quantification_results
+    	salmon quant -t !{fasta} -l ISR -a !{bam} -o quantification_results
     	
 	elif [[ ($strandedness == "secondstrand") ]]; then
     
-        salmon quant -t ${fasta} -l ISF -a ${bam} -o quantification_results
+        salmon quant -t !{fasta} -l ISF -a !{bam} -o quantification_results
         
 	elif [[ $strandedness == "unstranded" ]]; then
        
-        salmon quant -t {fasta} -l IU -a ${bam} -o quantification_results
+        salmon quant -t {fasta} -l IU -a !{bam} -o quantification_results
         
 	fi
 	'''   

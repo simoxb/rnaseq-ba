@@ -1,7 +1,6 @@
 process samtools {
     label 'samtools'
     
-    
     input:
     path(sam_file)
     

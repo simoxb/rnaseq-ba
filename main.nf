@@ -6,7 +6,7 @@ include {fastqsplit} from "./modules/splitFastq"
 include {samtools; samtools_merge} from "./modules/samtools"
 include {star_index; star_align} from "./modules/star"
 include {hisat2_index; hisat2_align} from "./modules/hisat2"
-include {tophat2_index; tophat2_align} from "./modules/tophat2"
+include {bowtie2_index; bowtie2_align} from "./modules/bowtie2"
 include {salmon_quant} from "./modules/salmon"
 
 workflow rnaseq_star{
@@ -62,14 +62,14 @@ workflow rnaseq_hisat2{
 	}
 }
 
-workflow rnaseq_tophat2{
+workflow rnaseq_bowtie2{
 
 	take:
 	input_read
 
 	main:
 	fastp(input_read)
-	tophat2_index(params.fasta)
+	bowtie2_index(params.fasta)
 	if(params.split > 1){
 		fastqsplit(fastp.out.trimmed) \
 	  	 | map { name, fastq -> tuple( groupKey(name, fastq.size()), fastq ) } \
@@ -77,13 +77,13 @@ workflow rnaseq_tophat2{
        	 	 | view()        	 	 
        		 | set{ splitted_ch }
        		 
-		tophat2_align(splitted_ch, tophat2_index.out.index, params.fasta)
-		samtools(tophat2_align.out.sam)
+		bowtie2_align(splitted_ch, bowtie2_index.out.index, params.fasta)
+		samtools(bowtie2_align.out.sam)
 		samtools_merge(samtools.out.collect())
 		salmon_quant(samtools_merge.out, params.fasta, params.strandedness)
 	}else{
-		tophat2_align(fastp.out.trimmed, tophat2_index.out.index, params.fasta)
-		samtools(tophat2_align.out.sam)
+		bowtie2_align(fastp.out.trimmed, bowtie2_index.out.index, params.fasta)
+		samtools(bowtie2_align.out.sam)
 		salmon_quant(samtools.out, params.fasta, params.strandedness)
 	}
 }
@@ -97,7 +97,7 @@ workflow{
 	rnaseq_hisat2(params.read)
 	}
 	
-	if(params.aligner=="tophat2"){
-	rnaseq_tophat2(params.read)
+	if(params.aligner=="bowtie2"){
+	rnaseq_bowtie2(params.read)
 	}	
 }

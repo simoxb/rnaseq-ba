@@ -6,11 +6,11 @@ process hisat2_index{
     path(fasta)
     
     output:
-    tuple path(fasta), path("${fasta.baseName}*.ht2"), emit: index
+    tuple path(reference), path("${reference.baseName}*.ht2"), emit: index
 
     script:
     """
-    hisat2-build ${fasta} ${fasta.baseName} -p ${params.threads} 
+    hisat2-build ${reference} ${reference.baseName} -p ${params.threads} 
     """
 }
 
@@ -20,7 +20,7 @@ process hisat2_align{
  
     input:
     tuple val(name), path(read)
-    tuple path(fasta), path(index)
+    tuple path(reference), path(index)
     env strandedness
 
     output:
@@ -30,15 +30,15 @@ process hisat2_align{
     '''
     if [[ ($strandedness == "firststrand") ]]; then
     
-        hisat2 -x !{fasta.baseName} -U !{read} --new-summary --summary-file !{read.baseName}_summary.log --thread !{params.threads} --rna-strandness FR -S !{read.baseName}.sam
+        hisat2 -x !{reference.baseName} -U !{read} --new-summary --summary-file !{read.baseName}_summary.log --thread !{params.threads} --rna-strandness FR -S !{read.baseName}.sam
 
     elif [[ ($strandedness == "secondstrand") ]]; then
     
-        hisat2 -x !{fasta.baseName} -U !{read} --new-summary --summary-file !{read.baseName}_summary.log --thread !{params.threads} --rna-strandness RF -S !{read.baseName}.sam
+        hisat2 -x !{reference.baseName} -U !{read} --new-summary --summary-file !{read.baseName}_summary.log --thread !{params.threads} --rna-strandness RF -S !{read.baseName}.sam
 
     elif [[ $strandedness == "unstranded" ]]; then
        
-        hisat2 -x !{fasta.baseName} -U !{read} --new-summary --summary-file !{read.baseName}_summary.log --thread !{params.threads} -S !{read.baseName}.sam
+        hisat2 -x !{reference.baseName} -U !{read} --new-summary --summary-file !{read.baseName}_summary.log --thread !{params.threads} -S !{read.baseName}.sam
     fi
     '''   
    

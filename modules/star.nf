@@ -4,7 +4,7 @@ process star_index{
     publishDir params.outdir
  
     input:
-    path(fasta)
+    path(reference)
     path(gtf)
 
     output:
@@ -16,7 +16,7 @@ process star_index{
     STAR \\
             --runMode genomeGenerate \\
             --genomeDir star/ \\
-	    --genomeFastaFiles ${fasta} \\
+	    --genomeFastaFiles ${reference} \\
             --sjdbGTFfile ${gtf} \\
 	    --runThreadN ${params.threads}
     """

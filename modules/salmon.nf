@@ -3,7 +3,7 @@ process salmon_quant{
 
 	input: 
 	path(bam)
-	path(fasta)
+	path(transcript)
 	env strandedness
 	
 	output:
@@ -13,15 +13,15 @@ process salmon_quant{
 	'''
 	if [[ ($strandedness == "firststrand") ]]; then
     
-    	salmon quant -t !{fasta} -l ISR -a !{bam} -o quantification_results
+    	salmon quant -t !{transcript} -l ISR -a !{bam} -o quantification_results
     	
 	elif [[ ($strandedness == "secondstrand") ]]; then
     
-        salmon quant -t !{fasta} -l ISF -a !{bam} -o quantification_results
+        salmon quant -t !{transcript} -l ISF -a !{bam} -o quantification_results
         
 	elif [[ $strandedness == "unstranded" ]]; then
        
-        salmon quant -t !{fasta} -l IU -a !{bam} -o quantification_results
+        salmon quant -t !{transcript} -l IU -a !{bam} -o quantification_results
         
 	fi
 	'''   

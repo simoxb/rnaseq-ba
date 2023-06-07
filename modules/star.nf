@@ -28,7 +28,7 @@ process star_align{
     publishDir params.outdir
  
     input:
-    tuple val(name), path(read)
+    path(read)
     path(index)
     path(gtf)
 

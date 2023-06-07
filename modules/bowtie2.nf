@@ -19,7 +19,7 @@ process bowtie2_align{
     publishDir params.outdir
     
     input:
-    tuple val(name), path(read)
+    path(read)
     path(index)
     path(reference)
     

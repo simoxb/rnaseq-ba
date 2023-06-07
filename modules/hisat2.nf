@@ -20,7 +20,7 @@ process hisat2_align{
     publishDir params.outdir
  
     input:
-    tuple val(name), path(read)
+    path(read)
     tuple path(reference), path(index)
     env strandedness
 

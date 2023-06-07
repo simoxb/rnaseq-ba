@@ -56,13 +56,13 @@ workflow rnaseq_hisat2{
 		hisat2_align(splitted_ch, hisat2_index.out.index, params.strandedness)
 		samtools(hisat2_align.out.sam)
 		samtools_merge(samtools.out.collect())
-		salmon_quant(samtools_merge.out, params.transcript, params.strandedness)
+		salmon_quant(samtools_merge.out, params.reference, params.strandedness)
 	}else{
 		fastp(input_read, params.strandedness)
 		hisat2_index(params.reference, fastp.out.strandedness)
 		hisat2_align(fastp.out.trimmed, hisat2_index.out.index, params.strandedness)
 		samtools(hisat2_align.out.sam)
-		salmon_quant(samtools.out, params.transcript, params.strandedness)
+		salmon_quant(samtools.out, params.reference, params.strandedness)
 	}
 }
 

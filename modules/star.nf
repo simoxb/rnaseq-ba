@@ -6,6 +6,7 @@ process star_index{
     input:
     path(reference)
     path(gtf)
+    env STRANDEDNESS
 
     output:
     path("star/*"), emit: index

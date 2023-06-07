@@ -3,6 +3,7 @@ process bowtie2_index{
 
     input:
     path(reference)
+    env STRANDEDNESS
     
     output: 
     path("${reference.baseName}*"), emit: index

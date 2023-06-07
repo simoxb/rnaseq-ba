@@ -4,6 +4,7 @@ process hisat2_index{
 
     input:
     path(reference)
+    env STRANDEDNESS
     
     output:
     tuple path(reference), path("${reference.baseName}*.ht2"), emit: index

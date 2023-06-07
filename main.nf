@@ -15,9 +15,9 @@ workflow rnaseq_star{
 	input_read
 
 	main:
-	fastp(input_read)
-	star_index(params.reference, params.gtf)
 	if(params.split > 1){
+		fastp(input_read, params.strandedness)
+		star_index(params.reference, params.gtf, params.strandedness)
 		fastqsplit(fastp.out.trimmed) \
 		 | map { name, fastq -> tuple( groupKey(name, fastq.size()), fastq ) } \
        	 	 | transpose() \
@@ -29,6 +29,8 @@ workflow rnaseq_star{
 		samtools_merge(samtools.out.collect())
 		salmon_quant(samtools_merge.out, params.transcript, params.strandedness)
 	}else{
+		fastp(input_read, params.strandedness)
+		star_index(params.reference, params.gtf, fastp.out.strandedness)
 		star_align(fastp.out.trimmed, star_index.out.index, params.gtf)
 		samtools(star_align.out.sam)
 		salmon_quant(samtools.out, params.transcript, params.strandedness)
@@ -42,9 +44,9 @@ workflow rnaseq_hisat2{
 	input_read
 
 	main:
-	fastp(input_read)
-	hisat2_index(params.reference)
 	if(params.split > 1){
+		fastp(input_read, params.strandedness)
+		hisat2_index(params.reference, params.strandedness)
 		fastqsplit(fastp.out.trimmed) \
 	  	 | map { name, fastq -> tuple( groupKey(name, fastq.size()), fastq ) } \
        	 	 | transpose() \
@@ -56,6 +58,8 @@ workflow rnaseq_hisat2{
 		samtools_merge(samtools.out.collect())
 		salmon_quant(samtools_merge.out, params.transcript, params.strandedness)
 	}else{
+		fastp(input_read, params.strandedness)
+		hisat2_index(params.reference, fastp.out.strandedness)
 		hisat2_align(fastp.out.trimmed, hisat2_index.out.index, params.strandedness)
 		samtools(hisat2_align.out.sam)
 		salmon_quant(samtools.out, params.transcript, params.strandedness)
@@ -68,9 +72,9 @@ workflow rnaseq_bowtie2{
 	input_read
 
 	main:
-	fastp(input_read)
-	bowtie2_index(params.reference)
 	if(params.split > 1){
+		fastp(input_read, params.strandedness)
+		bowtie2_index(params.reference, params.strandedness)
 		fastqsplit(fastp.out.trimmed) \
 	  	 | map { name, fastq -> tuple( groupKey(name, fastq.size()), fastq ) } \
        	 	 | transpose() \
@@ -81,7 +85,9 @@ workflow rnaseq_bowtie2{
 		samtools(bowtie2_align.out.sam)
 		samtools_merge(samtools.out.collect())
 		salmon_quant(samtools_merge.out, params.transcript, params.strandedness)
-	}else{
+	}else{	
+		fastp(input_read, params.strandedness)
+		bowtie2_index(params.reference, fastp.out.strandedness)
 		bowtie2_align(fastp.out.trimmed, bowtie2_index.out.index, params.reference)
 		samtools(bowtie2_align.out.sam)
 		salmon_quant(samtools.out, params.transcript, params.strandedness)

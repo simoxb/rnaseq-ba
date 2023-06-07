@@ -5,9 +5,11 @@ process fastp{
 	
 	input: 
 	path(read)
+	env STRANDEDNESS
 	
 	output: 
 	path("${read.baseName}_fastp.fastq"), emit: trimmed
+	env STRANDEDNESS, emit: strandedness
 		
 	script:
 	"""

@@ -3,7 +3,7 @@ process hisat2_index{
     publishDir params.outdir
 
     input:
-    path(fasta)
+    path(reference)
     
     output:
     tuple path(reference), path("${reference.baseName}*.ht2"), emit: index

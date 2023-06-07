@@ -7,7 +7,7 @@ include {samtools; samtools_merge} from "./modules/samtools"
 include {star_index; star_align} from "./modules/star"
 include {hisat2_index; hisat2_align} from "./modules/hisat2"
 include {bowtie2_index; bowtie2_align} from "./modules/bowtie2"
-include {salmon_quant} from "./modules/salmon"
+include {cufflinks} from "./modules/cufflinks"
 
 workflow rnaseq_star{
 
@@ -27,13 +27,13 @@ workflow rnaseq_star{
 		star_align(splitted_ch, star_index.out.index, params.gtf)
 		samtools(star_align.out.sam)
 		samtools_merge(samtools.out.collect())
-		salmon_quant(samtools_merge.out, params.transcript, params.strandedness)
+		cufflinks(samtools_merge.out, params.gtf, params.strandedness)
 	}else{
 		fastp(input_read, params.strandedness)
 		star_index(params.reference, params.gtf, fastp.out.strandedness)
 		star_align(fastp.out.trimmed, star_index.out.index, params.gtf)
 		samtools(star_align.out.sam)
-		salmon_quant(samtools.out, params.transcript, params.strandedness)
+		cufflinks(samtools.out, params.gtf, params.strandedness)
 	}
 }
 
@@ -56,13 +56,13 @@ workflow rnaseq_hisat2{
 		hisat2_align(splitted_ch, hisat2_index.out.index, params.strandedness)
 		samtools(hisat2_align.out.sam)
 		samtools_merge(samtools.out.collect())
-		salmon_quant(samtools_merge.out, params.reference, params.strandedness)
+		cufflinks(samtools_merge.out, params.gtf, params.strandedness)
 	}else{
 		fastp(input_read, params.strandedness)
 		hisat2_index(params.reference, fastp.out.strandedness)
 		hisat2_align(fastp.out.trimmed, hisat2_index.out.index, params.strandedness)
 		samtools(hisat2_align.out.sam)
-		salmon_quant(samtools.out, params.reference, params.strandedness)
+		cufflinks(samtools.out, params.gtf, params.strandedness)
 	}
 }
 
@@ -84,13 +84,13 @@ workflow rnaseq_bowtie2{
 		bowtie2_align(splitted_ch, bowtie2_index.out.index, params.reference)
 		samtools(bowtie2_align.out.sam)
 		samtools_merge(samtools.out.collect())
-		salmon_quant(samtools_merge.out, params.transcript, params.strandedness)
+		cufflinks(samtools_merge.out, params.gtf, params.strandedness)
 	}else{	
 		fastp(input_read, params.strandedness)
 		bowtie2_index(params.reference, fastp.out.strandedness)
 		bowtie2_align(fastp.out.trimmed, bowtie2_index.out.index, params.reference)
 		samtools(bowtie2_align.out.sam)
-		salmon_quant(samtools.out, params.transcript, params.strandedness)
+		cufflinks(samtools.out, params.gtf, params.strandedness)
 	}
 }
 

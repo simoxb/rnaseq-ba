@@ -9,7 +9,7 @@ process samtools {
     
     script:
     """
-    samtools view -b ${sam_file} | samtools sort -o ${sam_file}.sorted.bam -T tmp  
+    samtools view -b ${sam_file} -@ ${params.threads} | samtools sort -o ${sam_file}.sorted.bam -T tmp -@ ${params.threads}
     """
     
 }
@@ -26,6 +26,6 @@ process samtools_merge {
     
     script:
     """
-    samtools merge alignement_gathered.bam ${bam_files}
+    samtools merge alignement_gathered.bam ${bam_files} -@ {params.threads}
     """
 }

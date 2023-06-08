@@ -10,7 +10,7 @@ process bowtie2_index{
     
     script: 
     """
-    bowtie2-build -f ${reference} ${reference.baseName}
+    bowtie2-build -f ${reference} --threads ${params.threads} ${reference.baseName}
     """
 }
 

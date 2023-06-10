@@ -24,14 +24,14 @@ workflow rnaseq_star{
        	 	 | view()        	 	 
        		 | set{ splitted_ch }
        		
-		star_align(splitted_ch, star_index.out.index, params.gtf)
+		star_align(splitted_ch, star_index.out.index, params.gtf, params.strandedness)
 		samtools(star_align.out.sam)
 		samtools_merge(samtools.out.collect())
 		cufflinks(samtools_merge.out, params.gtf, params.strandedness)
 	}else{
 		fastp(input_read, params.strandedness)
 		star_index(params.reference, params.gtf, fastp.out.strandedness)
-		star_align(fastp.out.trimmed, star_index.out.index, params.gtf)
+		star_align(fastp.out.trimmed, star_index.out.index, params.gtf, params.strandedness)
 		samtools(star_align.out.sam)
 		cufflinks(samtools.out, params.gtf, params.strandedness)
 	}

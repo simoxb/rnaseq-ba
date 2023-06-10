@@ -31,20 +31,40 @@ process star_align{
     path(read)
     path(index)
     path(gtf)
+    env STRANDEDNESS
 
     output:
     path("${read.baseName}*.sam"), emit: sam 
 
-    script:
-    """
+    shell:
+    '''
+    if [[ ($STRANDEDNESS == "firststrand") || ($STRANDEDNESS == "secondstrand") ]]; then
     STAR \\
-    	--genomeDir . \\
-    	--readFilesIn ${read} \\
-    	--runThreadN ${params.threads} \\
-    	--outFilterIntronMotifs RemoveNoncanonical \\
-    	--outSAMattrIHstart 0 \\
-    	--alignSoftClipAtReferenceEnds No \\
-    	--sjdbGTFfile ${gtf} \\
-    	--outFileNamePrefix ${read.baseName}.
-    """	
+          --genomeDir . \\
+          --readFilesIn !{read}\\
+          --alignSoftClipAtReferenceEnds No \\
+          --outFileNamePrefix !{read.baseName}. \\
+          --sjdbGTFfile !{gtf} \\
+	  --outFilterIntronMotifs RemoveNoncanonical \\
+	  --outSAMattrIHstart 0 \\
+ 	  --runThreadN !{params.threads}
+
+    elif [[ $STRANDNESS == "unstranded" ]]; then
+       STAR \\
+          --genomeDir . \\
+          --readFilesIn !{read} \\
+	  --outFilterIntronMotifs RemoveNoncanonical \\
+          --alignSoftClipAtReferenceEnds No \\
+	  --outSAMstrandField intronMotif \\
+          --outFileNamePrefix !{read.baseName}. \\
+          --sjdbGTFfile !{gtf} \\
+	  --outSAMattrIHstart 0 \\
+	  --runThreadN !{params.threads}
+    else  
+		echo $STRANDEDNESS > error_strandedness.txt
+		echo "strandness cannot be determined" >> error_strandedness.txt
+	fi
+
+    '''   
+   
 }

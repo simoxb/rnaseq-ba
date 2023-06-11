@@ -49,7 +49,7 @@ process star_align{
 	  --outSAMattrIHstart 0 \\
  	  --runThreadN !{params.threads}
 
-    elif [[ $STRANDNESS == "unstranded" ]]; then
+    elif [[ $STRANDEDNESS == "unstranded" ]]; then
        STAR \\
           --genomeDir . \\
           --readFilesIn !{read} \\

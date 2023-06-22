@@ -9,7 +9,7 @@ process samtools {
     
     script:
     """
-    /work/simon/bin/samtools/bin/samtools view -b ${sam_file} -@ ${params.threads} | samtools sort -o ${sam_file}.sorted.bam -T tmp -@ ${params.threads}
+    samtools view -b ${sam_file} -@ ${params.threads} | samtools sort -o ${sam_file}.sorted.bam -T tmp -@ ${params.threads}
     """
     
 }
@@ -19,6 +19,7 @@ process samtools_merge {
     publishDir params.outdir
 
     input:
+   
     path(bam_files)
     
     output:

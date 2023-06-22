@@ -14,7 +14,7 @@ process star_index{
     script:
     """
     mkdir star
-    STAR \\
+    /work/simon/bin/STAR \\
             --runMode genomeGenerate \\
             --genomeDir star/ \\
 	    --genomeFastaFiles ${reference} \\
@@ -39,7 +39,7 @@ process star_align{
     shell:
     '''
     if [[ ($STRANDEDNESS == "firststrand") || ($STRANDEDNESS == "secondstrand") ]]; then
-    STAR \\
+    /work/simon/bin/STAR \\
           --genomeDir . \\
           --readFilesIn !{read}\\
           --alignSoftClipAtReferenceEnds No \\
@@ -50,7 +50,7 @@ process star_align{
  	  --runThreadN !{params.threads}
 
     elif [[ $STRANDEDNESS == "unstranded" ]]; then
-       STAR \\
+       /work/simon/bin/STAR \\
           --genomeDir . \\
           --readFilesIn !{read} \\
 	  --outFilterIntronMotifs RemoveNoncanonical \\

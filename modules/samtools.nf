@@ -9,7 +9,7 @@ process samtools {
     
     script:
     """
-    samtools view -b ${sam_file} -@ ${params.threads} | samtools sort -o ${sam_file}.sorted.bam -T tmp -@ ${params.threads}
+    /work/simon/bin/samtools/bin/samtools view -b ${sam_file} -@ ${params.threads} | samtools sort -o ${sam_file}.sorted.bam -T tmp -@ ${params.threads}
     """
     
 }

@@ -21,7 +21,7 @@ process hisat2_align{
  
     input:
     path(read)
-    tuple val(reference), path(index)
+    tuple path(reference), path(index)
     env strandedness
 
     output:

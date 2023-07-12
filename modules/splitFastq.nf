@@ -7,7 +7,7 @@ process fastqsplit{
     path(fastq)
 
     output:
-    tuple val("sample"), path("*${fastq.getBaseName()}.fastq"), emit: splitted
+    path("*${fastq.getBaseName()}.fastq"), emit: splitted
 
     shell:
     '''

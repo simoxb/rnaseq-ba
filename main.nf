@@ -24,7 +24,7 @@ workflow rnaseq_star{
        	 	 | view()        	 	 
        		 | set{ splitted_ch }
        		
-		star_align(splitted_ch, star_index.out.index, params.gtf, params.strandedness)
+		star_align(splitted_ch, star_index.out.index, params.gtf, params.strandedness.first())
 		samtools(star_align.out.sam)
 		samtools_merge(samtools.out.collect())
 		cufflinks(samtools_merge.out, params.gtf, params.strandedness)
@@ -53,7 +53,7 @@ workflow rnaseq_hisat2{
        	 	 | view()        	 	 
        		 | set{ splitted_ch }
        		 
-		hisat2_align(splitted_ch, hisat2_index.out.index, params.strandedness)
+		hisat2_align(splitted_ch, hisat2_index.out.index, params.strandedness.first())
 		samtools(hisat2_align.out.sam)
 		samtools_merge(samtools.out.collect())
 		cufflinks(samtools_merge.out, params.gtf, params.strandedness)

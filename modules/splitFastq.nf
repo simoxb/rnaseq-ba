@@ -4,10 +4,10 @@ process fastqsplit{
     label 'python'
     
     input:
-    path(fastq)
+    tuple val(sample), path(fastq)
 
     output:
-    path("*${fastq.getBaseName()}.fastq"), emit: splitted
+    tuple val(sample), path("*${fastq.getBaseName()}.fastq"), emit: splitted
 
     shell:
     '''

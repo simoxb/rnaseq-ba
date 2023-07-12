@@ -8,7 +8,7 @@ process fastp{
 	env STRANDEDNESS
 	
 	output: 
-	path("${read.baseName}_fastp.fastq"), emit: trimmed
+	tuple val("sample"), path("${read.baseName}_fastp.fastq"), emit: trimmed
 	env STRANDEDNESS, emit: strandedness
 		
 	script:
